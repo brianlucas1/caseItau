@@ -47,11 +47,11 @@ POST /api/dados-pessoais
 Content-Type: application/json
 
 {
-  "nome": "Ana",
-  "sobreNome": "Silva",
+  "nome": "teste",
+  "sobreNome": "teste b,
   "idade": 30,
   "pais": "Brasil",
-  "email": "ana.silva@example.com"
+  "email": "teste@teste.com"
 }
 
 
