@@ -17,11 +17,11 @@ public class GatewayRota  {
 
 		  return r.routes()
 		    .route("itau-api", p -> p
-		      .path("/api/**")
+		    		 .path("/api/**")
 		      .filters(f -> f
 		        .circuitBreaker(c -> c.setName("apiCB").setFallbackUri("forward:/__fallback"))
 		        .addRequestHeader("X-Forwarded-By", "Itau-Gateway"))
-		      .uri(targetApiUri))   // veremos o valor no passo 2
+		      .uri(targetApiUri)) 
 		    .build();
 		}
 
