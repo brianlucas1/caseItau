@@ -11,8 +11,7 @@ Observabilidade com **Prometheus + Grafana** (métricas) e **Loki + Promtail** (
 ```mermaid
 sequenceDiagram
   autonumber
-  participant UI as Angular (UI)
-  participant GW as API Gateway
+ participant GW as API Gateway
   participant API as DadosPessoais API
   participant DB as Postgres
   participant MQ as RabbitMQ
@@ -90,8 +89,7 @@ docker compose up -d --build
   "pais": "Brasil",
   "email": "naaa@n1.com"
 } "uf": "SP"
-  }
-}
+
 ```
 
 ### GET `/api/dados-pessoais/{id}` — consultar por ID
