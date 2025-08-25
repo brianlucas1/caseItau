@@ -7,9 +7,11 @@ Observability com Prometheus + Grafana (métricas) e Loki + Promtail (logs centr
 
 Gateway (8081) → roteia /api/** para a API interna (app:8080), adiciona X-Correlation-Id, aplica Circuit Breaker (Resilience4j) e Retry (GET).
 
-API (8080, apenas rede interna) → CRUD de /api/dados-pessoais, persiste no PostgreSQL, agenda +2 min e publica na fila; um consumer lê e dispara e-mail.
+API (8080, apenas rede interna) → CRUD de /api/dados-pessoais, persiste no PostgreSQL, agenda +2 min e publica na fila.
+ Um consumer lê e dispara e-mail.
 
-Observability → Prometheus “scrapa” métricas do Gateway e da API; Promtail coleta logs dos containers e envia ao Loki; Grafana unifica dashboards e busca de logs.
+Observability → Prometheus “scrapa” métricas do Gateway e da API;
+ Promtail coleta logs dos containers e envia ao Loki; Grafana unifica dashboards e busca de logs.
 
 
 # Utilização - Deve ter o docker instalado na máquina.
@@ -36,50 +38,28 @@ Grafana: http://localhost:3000
 
 # Testes da api 
 
-Testes rápidos (Postman/cURL)
-Endpoints (via Gateway 8081)
-
-Base: http://localhost:8081/api/dados-pessoais
-
-Criar (POST)
-
-POST /api/dados-pessoais
-Content-Type: application/json
+CADASTRO -  POST  http://localhost:8081/api/dados-pessoais
 
 {
-  "nome": "teste",
-  "sobreNome": "teste b,
+  "nome": "brian",
+  "sobreNome": "lucas",
   "idade": 30,
   "pais": "Brasil",
-  "email": "teste@teste.com"
+  "email": "n1@n1.com"
 }
 
+BUSCA POR ID - GET http://localhost:8081/api/dados-pessoais/1
 
-Listar (GET, paginação)
-
-GET /api/dados-pessoais?page=0&size=10
-
-
-Buscar por ID (GET)
-
-GET /api/dados-pessoais/1
-
-
-Atualizar (PUT)
-
-PUT /api/dados-pessoais/1
-(mesmo JSON do POST)
-
-
-Patch (um único campo)
-
-PATCH /api/dados-pessoais/1
+PATH - http://localhost:8080/api/dados-pessoais/1
+ pode ser enviado o exemplo de json a cima para atualizar uma pessoa apartir do id passado na url 
+ Ou somente enviado um atributo para mudança.
 {
-  "pais": "Chile"
+  "nome": "teste2 " 
 }
 
+Busca todos - GET http://localhost:8081/api/dados-pessoais
 
-Excluir (DELETE)
 
-DELETE /api/dados-pessoais/1
+
+
 
