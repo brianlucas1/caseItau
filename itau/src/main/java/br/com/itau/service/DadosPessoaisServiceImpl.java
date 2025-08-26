@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.itau.dto.DadosPessoaisDTO;
+import br.com.itau.dto.DadosPessoaisResponseDTO;
 import br.com.itau.excpetion.DadosPessoaisExcpetion;
 import br.com.itau.interfaces.DadosPessoaisService;
 import br.com.itau.interfaces.NotificacaoService;
@@ -15,10 +16,12 @@ import br.com.itau.mapper.DadosPessoaisMapper;
 import br.com.itau.model.DadosPessoaisModel;
 import br.com.itau.repository.DadosPessoaisRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class DadosPessoaisServiceImpl  implements DadosPessoaisService{
 	
 	private final DadosPessoaisRepository dadosPessoaisRepo;
@@ -27,9 +30,10 @@ public class DadosPessoaisServiceImpl  implements DadosPessoaisService{
 	
 	
 	@Override
-	public DadosPessoaisDTO cadastraNovoDadoPessoais(DadosPessoaisDTO dto) throws DadosPessoaisExcpetion {
+	public DadosPessoaisResponseDTO cadastraNovoDadoPessoais(DadosPessoaisDTO dto) throws DadosPessoaisExcpetion {
 
 		if (dadosPessoaisRepo.existsByEmail(dto.email())) {
+			log.error("Erro na tentativa de um novo cadastro : Email já cadastrado");
 			throw new DadosPessoaisExcpetion("Email já cadastrado.");
 		}
 
@@ -45,23 +49,24 @@ public class DadosPessoaisServiceImpl  implements DadosPessoaisService{
 
 	@Override
 	public DadosPessoaisModel buscaCadastroPorId(Integer id) throws DadosPessoaisExcpetion {
-
+		
 		return dadosPessoaisRepo.findById(id)
 				.orElseThrow(() -> new DadosPessoaisExcpetion("Não foi encontrado dados para o ID informado, }" + id));
 
 	}
 
 	@Override
-	public Page<DadosPessoaisDTO> buscaTodosCadastros(Pageable pagina) {
+	public Page<DadosPessoaisResponseDTO> buscaTodosCadastros(Pageable pagina) {
 
 		Page<DadosPessoaisModel> dpPaginado = dadosPessoaisRepo.findAll(pagina);
+		log.info("Encontrados registros para a consulta de dados pessoais : "  + pagina.getPageSize());
 
 		return dpPaginado.map(mapper::modelParaDTO);
 	}
 
 	@Override
 	@Transactional
-	public DadosPessoaisDTO atualizaDadosPessoais(Integer id, DadosPessoaisDTO dto) throws DadosPessoaisExcpetion {
+	public DadosPessoaisResponseDTO atualizaDadosPessoais(Integer id, DadosPessoaisDTO dto) throws DadosPessoaisExcpetion {
 
 		DadosPessoaisModel dpModel = buscaCadastroPorId(id);
 
@@ -83,8 +88,9 @@ public class DadosPessoaisServiceImpl  implements DadosPessoaisService{
 	
 	@Override
 	@Transactional
-	public DadosPessoaisDTO patchDadosPessoais(Integer id, Map<String, Object> updates) throws DadosPessoaisExcpetion {
+	public DadosPessoaisResponseDTO patchDadosPessoais(Integer id, Map<String, Object> updates) throws DadosPessoaisExcpetion {
 		if (updates == null || updates.isEmpty()) {
+			log.info("Nenhum campo para atualizar");
 			throw new DadosPessoaisExcpetion("Nenhum campo para atualizar.");
 		}
 		if (updates.size() > 1) {
@@ -101,12 +107,15 @@ public class DadosPessoaisServiceImpl  implements DadosPessoaisService{
 		case "email" -> {
 			String novoEmail = (String) value;
 			if (!novoEmail.equals(m.getEmail()) && dadosPessoaisRepo.existsByEmail(novoEmail)) {
+				log.error("Email já cadastro");
 				throw new DadosPessoaisExcpetion("Email já cadastrado.");
 			}
 			m.setEmail(novoEmail);
 		}
 		default -> throw new DadosPessoaisExcpetion("Campo não suportado para PATCH: " + field);
 		}
+		log.info("Encontrados registro atualizado com sucesso ");
+
 		return mapper.modelParaDTO(dadosPessoaisRepo.save(m));
 	}
 

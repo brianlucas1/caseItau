@@ -1,5 +1,5 @@
-C:\itau\gateway\src\main\java\br\com\gateway\config\CorrelationIdFilter.java
-C:\itau\gateway\src\main\java\br\com\gateway\config\FallbackController.java
-C:\itau\gateway\src\main\java\br\com\gateway\config\GatewayRota.java
-C:\itau\gateway\src\main\java\br\com\gateway\config\ResilienceConfig.java
-C:\itau\gateway\src\main\java\br\com\gateway\GatewayApplication.java
+G:\itau-case\caseItau\gateway\src\main\java\br\com\gateway\config\CorrelationIdFilter.java
+G:\itau-case\caseItau\gateway\src\main\java\br\com\gateway\config\FallbackController.java
+G:\itau-case\caseItau\gateway\src\main\java\br\com\gateway\config\GatewayRota.java
+G:\itau-case\caseItau\gateway\src\main\java\br\com\gateway\config\ResilienceConfig.java
+G:\itau-case\caseItau\gateway\src\main\java\br\com\gateway\GatewayApplication.java

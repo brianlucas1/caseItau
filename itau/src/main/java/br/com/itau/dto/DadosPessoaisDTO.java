@@ -1,6 +1,7 @@
 package br.com.itau.dto;
 
-public record DadosPessoaisDTO( 
+public record DadosPessoaisDTO(
+		
 		String nome,
 		String sobreNome,
 		Integer idade, 

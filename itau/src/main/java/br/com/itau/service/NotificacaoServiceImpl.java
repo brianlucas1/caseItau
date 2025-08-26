@@ -6,10 +6,12 @@ import br.com.itau.dto.DadosPessoaisDTO;
 import br.com.itau.interfaces.NotificacaoService;
 import br.com.itau.rabbit.NotificaoProducer;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 
 @Service
 @RequiredArgsConstructor
+
 public class NotificacaoServiceImpl   implements NotificacaoService {
 
 	  private final NotificaoProducer producer;

@@ -6,9 +6,11 @@ import org.springframework.stereotype.Component;
 
 import br.com.itau.dto.DadosPessoaisDTO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class NotificaoProducer {
 	
 	private final RabbitTemplate rabbitTemplate;
@@ -27,6 +29,6 @@ public class NotificaoProducer {
 			message.getMessageProperties().setExpiration(TTL_MS);
 			return message;
 		});
-		System.out.println("ENVIADO PARA A FILA  " + dto);
+		log.info("Enviado para a fila a menssagem com atraso de 2m");
 	}
 }

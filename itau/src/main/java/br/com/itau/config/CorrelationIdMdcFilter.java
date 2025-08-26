@@ -15,23 +15,22 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
 public class CorrelationIdMdcFilter extends OncePerRequestFilter {
-  private static final String HEADER = "X-Correlation-Id";
-  private static final String MDC_KEY = "correlationId";
+	private static final String HEADER = "X-Correlation-Id";
+	private static final String MDC_KEY = "correlationId";
 
-  @Override
-  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-      throws ServletException, IOException {
+	@Override
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+			throws ServletException, IOException {
 
-    String cid = Optional.ofNullable(request.getHeader(HEADER))
-                         .filter(h -> !h.isBlank())
-                         .orElse(UUID.randomUUID().toString());
+		String cid = Optional.ofNullable(request.getHeader(HEADER)).filter(h -> !h.isBlank())
+				.orElse(UUID.randomUUID().toString());
 
-    MDC.put(MDC_KEY, cid);
-    try {
-      response.setHeader(HEADER, cid);
-      chain.doFilter(request, response);
-    } finally {
-      MDC.remove(MDC_KEY);
-    }
-  }
+		MDC.put(MDC_KEY, cid);
+		try {
+			response.setHeader(HEADER, cid);
+			chain.doFilter(request, response);
+		} finally {
+			MDC.remove(MDC_KEY);
+		}
+	}
 }
